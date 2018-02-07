@@ -1,10 +1,13 @@
-package com.krvang.lindved.checkedpaper;
+package com.krvang.lindved.checkedpaper.gui;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+
+import com.krvang.lindved.checkedpaper.R;
+import com.krvang.lindved.checkedpaper.gui.GameActivity;
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -20,8 +23,8 @@ public class MenuActivity extends AppCompatActivity {
 
     public void goToGameActivity(View view){
         Intent intent = new Intent(this, GameActivity.class);
-        intent.putExtra("Rows", Integer.parseInt(mRows.getText().toString()));
-        intent.putExtra("Columns", Integer.parseInt(mColumns.getText().toString()));
+        intent.putExtra(getString(R.string.rows), Integer.parseInt(mRows.getText().toString()));
+        intent.putExtra(getString(R.string.columns), Integer.parseInt(mColumns.getText().toString()));
         startActivity(intent);
     }
 }

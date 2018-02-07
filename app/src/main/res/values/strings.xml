@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CheckedPaper</string>
+    <string name="rows">Rows</string>
+    <string name="columns">Columns</string>
 </resources>
