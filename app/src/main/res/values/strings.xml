@@ -4,4 +4,5 @@
     <string name="columns">Columns</string>
     <string name="red">Red</string>
     <string name="white">White</string>
+    <string name="invalid_numbers">Please enter valid numbers</string>
 </resources>
