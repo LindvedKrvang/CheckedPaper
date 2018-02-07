@@ -33,15 +33,16 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void createBoard(){
-        View.OnClickListener ocl = createTileOnClickListener();
+        View.OnClickListener ocl = createOnClickListener();
+        View.OnLongClickListener olcl = createOnLongClickListener();
 
         LinearLayout boardView = findViewById(R.id.llBoard);
         boardView.removeAllViews();
 
-        createTilesOnBoard(boardView, ocl);
+        createTilesOnBoard(boardView, ocl, olcl);
     }
 
-    private void createTilesOnBoard(LinearLayout boardView, View.OnClickListener ocl){
+    private void createTilesOnBoard(LinearLayout boardView, View.OnClickListener ocl, View.OnLongClickListener olcl){
         for(int i = 0; i < mRows; i++){
             LinearLayout currentLL = new LinearLayout(this);
             boardView.addView(currentLL);
@@ -50,20 +51,31 @@ public class GameActivity extends AppCompatActivity {
                 Tile tile = new Tile(this, i, j);
                 currentLL.addView(tile);
                 tile.setOnClickListener(ocl);
+                tile.setOnLongClickListener(olcl);
                 mTiles[i][j] = tile;
             }
         }
     }
 
-    private View.OnClickListener createTileOnClickListener(){
+    private View.OnClickListener createOnClickListener(){
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Tile tile = (Tile)v;
                 tile.switchImage();
+            }
+        };
+    }
+
+    private View.OnLongClickListener createOnLongClickListener(){
+        return new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Tile tile = (Tile)v;
                 int connectedTiles = mTilesChecker.countConnectedTiles(tile.getRow(), tile.getCol(), tile.getColor());
-                Toast.makeText(getBaseContext(), "There are: " + connectedTiles + " connected", Toast.LENGTH_LONG).show();
                 clearForNextClick();
+                Toast.makeText(getBaseContext(), "There are: " + connectedTiles + " connected", Toast.LENGTH_LONG).show();
+                return true;
             }
         };
     }

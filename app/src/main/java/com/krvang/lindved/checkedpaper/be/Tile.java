@@ -37,7 +37,7 @@ public class Tile extends AppCompatImageView {
     }
 
     public String getColor(){
-        return (mImage == R.drawable.circlered) ? "Red" : "White";
+        return (mImage == R.drawable.circlered) ? getContext().getString(R.string.red) : getContext().getString(R.string.white);
     }
 
     public boolean isChecked(){

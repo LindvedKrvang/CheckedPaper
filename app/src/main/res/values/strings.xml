@@ -2,4 +2,6 @@
     <string name="app_name">CheckedPaper</string>
     <string name="rows">Rows</string>
     <string name="columns">Columns</string>
+    <string name="red">Red</string>
+    <string name="white">White</string>
 </resources>
