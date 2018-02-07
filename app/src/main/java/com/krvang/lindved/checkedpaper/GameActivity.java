@@ -9,12 +9,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class GameActivity extends AppCompatActivity {
 
-    private int mRows, mCols;
+    private int mRows, mCols, mCount;
     private Tile[][] mTiles;
 
     @Override
@@ -28,6 +25,8 @@ public class GameActivity extends AppCompatActivity {
         mTiles = new Tile[mRows][mCols];
 
         createBoard();
+
+        mCount = 0;
     }
 
     private void createBoard(){
@@ -37,9 +36,8 @@ public class GameActivity extends AppCompatActivity {
                 Tile tile = (Tile)v;
                 tile.switchImage();
                 checkTiles(tile.getRow(), tile.getCol(), tile.getColor());
-//                Toast.makeText(getBaseContext(),
-//                        "(" + tile.getRow() + ":" + tile.getCol() + ")",
-//                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "There are: " + mCount + " connected", Toast.LENGTH_LONG).show();
+                clearForNextClick();
             }
         };
 
@@ -59,31 +57,58 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    private void checkTiles(int row, int col, String color){
-        List<Tile> tiles = new ArrayList();
-        tiles.add(mTiles[row - 1][col]);
-        tiles.add(mTiles[row + 1][col]);
-        tiles.add(mTiles[row][col - 1]);
-        tiles.add(mTiles[row][col + 1]);
-
-        int count = 0;
-
-        for (Tile tile: tiles) {
-            if(tile.getColor().equals(color))
-                count++;
+    private void clearForNextClick(){
+        mCount = 0;
+        for (Tile[] tileRow: mTiles) {
+            for(Tile tile: tileRow){
+                tile.setChecked(false);
+            }
         }
+    }
 
-        Toast.makeText(getBaseContext(), "There are: " + count + " connected", Toast.LENGTH_LONG).show();
+    private void checkTiles(int row, int col, String color){
+        mTiles[row][col].setChecked(true);
+
+        if(row + 1 < mRows){
+            Tile tile = mTiles[row + 1][col];
+            if (tile.getColor().equals(color) && !tile.isChecked()){
+                mCount++;
+                checkTiles(row + 1, col, color);
+            }
+        }
+        if(row - 1 >= 0){
+            Tile tile = mTiles[row - 1][col];
+            if(tile.getColor().equals(color) && !tile.isChecked()){
+                mCount++;
+                checkTiles(row - 1, col, color);
+            }
+        }
+        if(col + 1 < mCols){
+            Tile tile = mTiles[row][col + 1];
+            if(tile.getColor().equals(color)  && !tile.isChecked()){
+                mCount++;
+                checkTiles(row, col + 1, color);
+            }
+        }
+        if(col - 1 >= 0){
+            Tile tile = mTiles[row][col - 1];
+            if(tile.getColor().equals(color) && !tile.isChecked()){
+                mCount++;
+                checkTiles(row, col - 1, color);
+            }
+        }
     }
 
     class Tile extends AppCompatImageView {
 
         private int mRow, mCol, mImage;
+        private boolean mIsChecked;
 
         public Tile(Context context, int row, int col) {
             super(context);
             mRow = row;
             mCol = col;
+            mIsChecked = false;
             mImage = R.drawable.circlered;
             setImageResource(mImage);
         }
@@ -102,7 +127,15 @@ public class GameActivity extends AppCompatActivity {
         }
 
         public String getColor(){
-            return (mImage == R.drawable.circlered) ? "White" : "Red";
+            return (mImage == R.drawable.circlered) ? "Red" : "White";
+        }
+
+        public boolean isChecked(){
+            return mIsChecked;
+        }
+
+        public void setChecked(boolean checked){
+            mIsChecked = checked;
         }
     }
 }
